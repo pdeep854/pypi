@@ -145,6 +145,7 @@ jobs:
           merge-multiple: true
       - name: Publish release
         env:
+          DIST_DIR: dist
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/publish_releases.py
 
