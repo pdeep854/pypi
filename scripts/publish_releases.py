@@ -8,10 +8,17 @@ import subprocess
 import sys
 import zipfile
 from collections import defaultdict
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 from email import policy
 from email.parser import BytesParser
 from pathlib import Path
+
+DEFAULT_DIST_DIR = Path("dist")
+
+
+def distribution_directory(environment: Mapping[str, str]) -> Path:
+    """Return the artifact directory, defaulting to the workflows' dist/ path."""
+    return Path(environment.get("DIST_DIR", DEFAULT_DIST_DIR))
 
 
 def distribution_identity(wheel: Path) -> tuple[str, str]:
@@ -86,7 +93,7 @@ def publish_releases(
 
 
 def main() -> None:
-    dist_dir = Path(os.environ["DIST_DIR"])
+    dist_dir = distribution_directory(os.environ)
     wheels = list(dist_dir.glob("*.whl"))
     if not wheels:
         sys.exit(f"No wheels found in {dist_dir}")

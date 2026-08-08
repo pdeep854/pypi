@@ -19,6 +19,13 @@ def make_wheel(directory: Path, filename: str, name: str, version: str) -> Path:
 
 
 class PublishReleasesTest(unittest.TestCase):
+    def test_distribution_directory_defaults_to_dist(self):
+        self.assertEqual(publish_releases.distribution_directory({}), Path("dist"))
+        self.assertEqual(
+            publish_releases.distribution_directory({"DIST_DIR": "artifacts"}),
+            Path("artifacts"),
+        )
+
     def test_groups_wheels_by_embedded_metadata_not_filename(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
