@@ -41,6 +41,20 @@ class PublishReleasesTest(unittest.TestCase):
         self.assertEqual(set(grouped), {"Example-Project@1.2.3", "other.project@4.5.6"})
         self.assertEqual(set(grouped["Example-Project@1.2.3"]), {first, second})
 
+    def test_complete_releases_keeps_everything_without_expected_count(self):
+        releases = {"a@1": [Path("a.whl")]}
+        self.assertEqual(publish_releases.complete_releases(releases, None), releases)
+
+    def test_complete_releases_drops_partial_platform_sets(self):
+        releases = {
+            "full@1": [Path("a.whl"), Path("b.whl")],
+            "partial@2": [Path("c.whl")],
+        }
+        self.assertEqual(
+            publish_releases.complete_releases(releases, 2),
+            {"full@1": releases["full@1"]},
+        )
+
     def test_existing_release_uploads_and_missing_release_creates(self):
         calls = []
 

@@ -189,6 +189,13 @@ It will skip the build if wheels for that ref already exist on
 https://pypi.halide-lang.org/simple/. Wheels are uploaded automatically after all platform
 builds succeed.
 
+On its weekly schedule (no `llvm_ref` given), it instead auto-discovers what
+to build: `main`, plus the latest release or RC tag for each of the two most
+recent LLVM release branches (e.g. the current stable series and the next
+one still in RC). Each ref only gets its GitHub release published once every
+platform for it has built successfully in that run, so a one-off failure on
+a single platform doesn't get masked from a future retry.
+
 ## Caching
 
 Downloaded sources are cached in `src_cache/`. To force a re-download, delete
