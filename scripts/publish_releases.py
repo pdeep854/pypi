@@ -51,6 +51,27 @@ def wheels_by_release(wheels: Iterable[Path]) -> dict[str, list[Path]]:
     return dict(grouped)
 
 
+def complete_releases(
+    releases: dict[str, list[Path]], expected_count: int | None
+) -> dict[str, list[Path]]:
+    """Drop releases missing wheels, so a partial platform failure doesn't
+    permanently mask the missing platforms from a future retry.
+
+    A release only gets published once every expected platform's wheel is
+    present in this run. `expected_count` is None for callers (e.g. plain
+    dependency packages) that don't build one ref across a fixed platform
+    matrix in a single job, and so have no completeness expectation to check.
+    """
+    if expected_count is None:
+        return releases
+    complete, incomplete = {}, {}
+    for tag, files in releases.items():
+        (complete if len(files) >= expected_count else incomplete)[tag] = files
+    for tag, files in incomplete.items():
+        print(f"{tag}: only {len(files)}/{expected_count} platforms built, skipping")
+    return complete
+
+
 def publish_releases(
     releases: dict[str, list[Path]],
     repository: str,
@@ -97,8 +118,12 @@ def main() -> None:
     wheels = list(dist_dir.glob("*.whl"))
     if not wheels:
         sys.exit(f"No wheels found in {dist_dir}")
+    expected_count = os.environ.get("EXPECTED_PLATFORM_COUNT")
     publish_releases(
-        wheels_by_release(wheels),
+        complete_releases(
+            wheels_by_release(wheels),
+            int(expected_count) if expected_count else None,
+        ),
         os.environ["GITHUB_REPOSITORY"],
         os.environ["GITHUB_WORKFLOW"],
     )
