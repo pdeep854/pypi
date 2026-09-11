@@ -23,6 +23,7 @@ pip install halide-llvm==21.1.8 \
 | macOS x86-64   | `macosx_11_0_x86_64`     |
 | macOS ARM64    | `macosx_11_0_arm64`      |
 | Windows x86-64 | `win_amd64`              |
+| Windows ARM64  | `win_arm64`              |
 | Windows x86-32 | `win32`                  |
 
 ### Usage with CMake
@@ -160,6 +161,7 @@ Pre-configured toolchain files are provided in `toolchains/`:
 | `x86-64-macos.cmake`   | macOS x86-64 (native)                              |
 | `arm-64-macos.cmake`   | macOS arm-64 (native, Apple Silicon)               |
 | `x86-64-windows.cmake` | Windows x86-64 (native, requires vcvarsall)        |
+| `arm64-windows.cmake`   | Windows ARM64 (native, requires ARM64 vcvarsall)   |
 | `x86-32-windows.cmake` | Windows x86-32 (cross-compile, requires vcvarsall) |
 
 All toolchains include `initial-cache.cmake` which configures:

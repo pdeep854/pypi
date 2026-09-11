@@ -73,6 +73,13 @@ PLATFORMS = (
         "msvc_arch": "amd64",
     },
     {
+        "platform": "arm-64-windows",
+        "runner": "windows-11-arm",
+        "toolchain": "arm64-windows.cmake",
+        "msvc_arch": "arm64",
+        "wheel_plat": "win_arm64",
+    },
+    {
         "platform": "x86-32-windows",
         "runner": "windows-2022",
         "toolchain": "x86-32-windows.cmake",

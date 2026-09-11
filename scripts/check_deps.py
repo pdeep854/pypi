@@ -43,6 +43,12 @@ PLATFORMS = (
     {"platform": "arm-64-macos", "runner": "macos-15"},
     {"platform": "x86-64-windows", "runner": "windows-latest", "msvc_arch": "amd64"},
     {
+        "platform": "arm-64-windows",
+        "runner": "windows-11-arm",
+        "msvc_arch": "arm64",
+        "wheel_plat": "win_arm64",
+    },
+    {
         "platform": "x86-32-windows",
         "runner": "windows-latest",
         "msvc_arch": "amd64_x86",
